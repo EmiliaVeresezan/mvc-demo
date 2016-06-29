@@ -1,5 +1,6 @@
 package ro.sci.ems.cfg;
 
+
 import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
@@ -17,7 +18,20 @@ import ro.sci.ems.mvc.SecurityFilter;
 @Configuration
 public class ApplicationConfiguration {
 
+	@Bean
+    public BasicDataSource dataSource()  {
+        String dbUrl = System.getenv("JDBC_DATABASE_URL");
+        String username = System.getenv("JDBC_DATABASE_USERNAME");
+        String password = System.getenv("JDBC_DATABASE_PASSWORD");
 
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(dbUrl);
+        basicDataSource.setUsername(username);
+        basicDataSource.setPassword(password);
+
+        return basicDataSource;
+    }
+	
     @Bean
     public FilterRegistrationBean securityFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -33,27 +47,27 @@ public class ApplicationConfiguration {
     	return new SecurityFilter();
     }
     
-	@Bean
-	public DataSource dataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setDriverClassName("org.postgresql.Driver");
-		
-		String url = new StringBuilder()
-				.append("jdbc:")
-				.append("postgresql")
-				.append("://")
-				.append("localhost")
-				.append(":")
-				.append("5432")
-				.append("/")
-				.append("ems").toString();
-		
-		dataSource.setUrl(url);
-		dataSource.setUsername("sebi");
-		dataSource.setPassword("sebi");
-		return dataSource;
-		
-	}
+//	@Bean
+//	public DataSource dataSource() {
+//		BasicDataSource dataSource = new BasicDataSource();
+//		dataSource.setDriverClassName("org.postgresql.Driver");
+//		
+//		String url = new StringBuilder()
+//				.append("jdbc:")
+//				.append("postgresql")
+//				.append("://")
+//				.append("localhost")
+//				.append(":")
+//				.append("5432")
+//				.append("/")
+//				.append("ems").toString();
+//		
+//		dataSource.setUrl(url);
+//		dataSource.setUsername("sebi");
+//		dataSource.setPassword("sebi");
+//		return dataSource;
+//		
+//	}
 	
 	@Bean
 	public EmployeeDAO employeeDAO() {
